@@ -23,6 +23,7 @@ function refreshPrompt() {
 
   if (diffInMinutes >= 30) {
     getBasePrompt().then((prompt) => {
+      console.log(prompt)
       config.prompt = prompt
       Config().set('prompt', prompt)
       Config().set('prompt_date', new Date().toISOString())

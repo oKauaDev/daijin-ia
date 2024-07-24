@@ -7,7 +7,7 @@ function SettingsScreen(): BrowserWindow {
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: fileURLToPath(new URL('../preload/index.mjs', import.meta.url)),
+      preload: fileURLToPath(new URL('../preload/index.js', import.meta.url)),
       sandbox: false
     }
   })

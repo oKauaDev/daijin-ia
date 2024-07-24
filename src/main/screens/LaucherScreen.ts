@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron'
+import { BrowserWindow, session } from 'electron'
 import { fileURLToPath } from 'url'
 import icon from '../../../resources/icon.png?asset'
 
@@ -13,11 +13,24 @@ function LaucherScreen(): BrowserWindow {
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: fileURLToPath(new URL('../preload/index.mjs', import.meta.url)),
+      preload: fileURLToPath(new URL('../preload/index.js', import.meta.url)),
       sandbox: false,
       contextIsolation: true,
       nodeIntegration: false
     }
+  })
+
+  mainWindow.loadFile('index.html')
+
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [
+          "default-src 'self'; connect-src 'self' https://api.openai.com https://api.naga.ac;"
+        ]
+      }
+    })
   })
 
   return mainWindow

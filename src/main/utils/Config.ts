@@ -25,8 +25,10 @@ export default function Config() {
       const rawData = fs.readFileSync(path_name, 'utf-8').toString()
       return JSON.parse(rawData)
     } else {
+      const date = new Date().getTime() - 24 * 60 * 60 * 1000
+
       const defConfig: ConfigInterface = {
-        prompt_date: new Date().toISOString(),
+        prompt_date: new Date(date).toISOString(),
         prompt: 'Você é Daijin, um assistente virtual.',
         lang: 'pt',
         start_with_system: true,
@@ -39,6 +41,7 @@ export default function Config() {
         ia_model: 'gpt-4'
       }
 
+      if (fs.existsSync(homedir)) fs.mkdirSync(homedir)
       fs.mkdirSync(path.join(homedir, '.daijin-ia'))
       fs.writeFileSync(path_name, JSON.stringify(defConfig, null, 2), 'utf-8')
 
@@ -49,6 +52,7 @@ export default function Config() {
   function set(key: keyof ConfigInterface, value: any) {
     const config = get()
     config[key] = value as never
+
     fs.writeFileSync(path_name, JSON.stringify(config, null, 2))
   }
 

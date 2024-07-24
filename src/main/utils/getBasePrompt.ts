@@ -1,17 +1,31 @@
 import CONFIG from '../../renderer/src/constants/Config'
-import { ConfigInterface } from './Config'
+import Config from './Config'
 import getSystemInfos from './getSystemInfos'
+
+interface ConfigInterface {
+  prompt_date: string
+  prompt: string
+  lang: 'pt'
+  start_with_system: boolean
+  auto_update: boolean
+  shortcut_go_front: string
+  shortcut_go_back: string
+  shortcut_settings: string
+  ia_type: 'nagaia' | 'openai'
+  ia_key: string
+  ia_model: string
+}
 
 export default async function getBasePrompt() {
   try {
-    //@ts-ignore
-    const config: ConfigInterface = await window.parseInt.getConfig()
+    let config: ConfigInterface | null = Config().get()
+
     const system = await getSystemInfos()
 
     let base_prompt = `
       Você é Daijin um asistente pessoal que está na sua versão ${CONFIG.VERSION} e está do computador do ${system.username}, você está aqui para auxiliar ele no seu dia a dia, ele usa o sistema ${system.systemname} que está equipado com um processador ${system.cpu_name} em uma placa mãe ${system.mainboard} com ${system.free_mem} de memoria livre, ${system.used_mem} de memoria usada e ${system.cpu} de cpu usada.
 
-      Sua IA está equipada com o modelo ${config.ia_model} e a empresa que está te sustentando é a ${config.ia_type}.
+      Sua IA está equipada com o modelo ${config?.ia_model} e a empresa que está te sustentando é a ${config?.ia_type}.
 
       A pasta home dele se encontra no caminho ${system.homedir}, o shell usado é ${system.shell}.
     `
@@ -56,7 +70,8 @@ export default async function getBasePrompt() {
     `
 
     return base_prompt
-  } catch {
+  } catch (e) {
+    console.error(e)
     return ''
   }
 }

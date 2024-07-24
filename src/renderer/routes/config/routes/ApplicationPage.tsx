@@ -2,12 +2,13 @@ import { ReactSVG } from 'react-svg'
 import InputSelect from './components/InputSelect'
 import InputCheckbox from './components/InputCheckbox'
 import React from 'react'
+import DaijinSettingsIcon from '../../../svgs/DaijinSettingsIcon'
 
 export default function ApplicationPage() {
   return (
     <div className="enter-left-animation">
       <div className="application-container-top">
-        <ReactSVG src="../../../assets/icons/daijin-settings-logo.svg" />
+        <DaijinSettingsIcon />
         <div>
           <h1 className="text-gradient">Daijin</h1>
           <p className="text-gradient">Seu assistente pessoal.</p>

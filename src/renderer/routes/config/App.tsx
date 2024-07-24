@@ -15,6 +15,7 @@ function App() {
     async function define() {
       //@ts-ignore
       const confis: ConfigInterface = await window.api.getConfig()
+
       setRender(true)
       glovalVariables.setConfig(confis)
     }

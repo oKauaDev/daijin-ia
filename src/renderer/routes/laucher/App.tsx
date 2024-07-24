@@ -5,6 +5,10 @@ import Brain from '../../src/Daijin/Brain'
 import { ReactSVG } from 'react-svg'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 import './App.css'
+import GeneratorIcon from '../../svgs/GeneratorIcon'
+import ArrowLeft from '../../svgs/ArrowLeft'
+import ArrowRight from '../../svgs/ArrowRight'
+import DaijinLoading from '../../assets/daijin-loading.png'
 
 function App(): JSX.Element {
   const promptRef = React.useRef<HTMLInputElement>(null)
@@ -112,7 +116,7 @@ function App(): JSX.Element {
     <>
       <div className="input-container">
         <div className="disparator">
-          <ReactSVG src="../../assets/icons/generator-icon.svg" width={32} height={32} />
+          <GeneratorIcon />
           <input
             onKeyDown={onKeyDown}
             type="text"
@@ -123,7 +127,7 @@ function App(): JSX.Element {
         </div>
         <div className="navigator">
           <button className="arrow" onClick={() => onArrowClick('left')}>
-            <ReactSVG src="../../assets/icons/arrow-left.svg" width={32} height={32} />
+            <ArrowLeft />
           </button>
           <button className="viewNumber">
             {historyIndex + 1 > history.length
@@ -131,7 +135,7 @@ function App(): JSX.Element {
               : `${historyIndex + 1 + (loading ? 1 : 0)}/${history.length + (loading ? 1 : 0)}`}
           </button>
           <button className="arrow" onClick={() => onArrowClick('right')}>
-            <ReactSVG src="../../assets/icons/arrow-right.svg" width={32} height={32} />
+            <ArrowRight />
           </button>
           <button className="enter-decorator" onClick={onSubmitInput}>
             enter
@@ -141,7 +145,7 @@ function App(): JSX.Element {
       <span className="separator"></span>
       {loading ? (
         <div className="loading-response">
-          <img src="../../assets/daijin-loading.png" />
+          <img src={DaijinLoading} />
           <p>Estou gerando a sua resposta, normalmente não demoro mais de 10 segundos.</p>
         </div>
       ) : (
