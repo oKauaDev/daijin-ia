@@ -1,10 +1,10 @@
 {
   "name": "daijin-ia",
   "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "description": "Just an AI to help me in my everyday life.",
   "main": "./out/main/index.js",
   "author": "Kauã Braz",
-  "homepage": "https://electron-vite.org",
+  "homepage": "https://kaua.dev.br",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",

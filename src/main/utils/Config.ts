@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'node:url'
+import * as os from 'os'
 
 export interface ConfigInterface {
   prompt_date: string
@@ -17,8 +17,8 @@ export interface ConfigInterface {
 }
 
 export default function Config() {
-  const __dirname = path.dirname(fileURLToPath(import.meta.url))
-  const path_name = path.join(__dirname, 'config.json')
+  const homedir = os.homedir()
+  const path_name = path.join(homedir, '.daijin-ia/config.json')
 
   function get(): ConfigInterface {
     if (fs.existsSync(path_name)) {
@@ -36,9 +36,10 @@ export default function Config() {
         shortcut_settings: 'Ctrl+I',
         ia_type: 'nagaia',
         ia_key: '',
-        ia_model: 'text-davinci-003'
+        ia_model: 'gpt-4'
       }
 
+      fs.mkdirSync(path.join(homedir, '.daijin-ia'))
       fs.writeFileSync(path_name, JSON.stringify(defConfig, null, 2), 'utf-8')
 
       return defConfig
