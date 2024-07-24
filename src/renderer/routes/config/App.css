@@ -1,0 +1,196 @@
+body {
+  font-family: "Poppins", sans-serif;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%),
+    url("../../assets/background.png") no-repeat center center / cover, #020203;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.container {
+  margin: 11.111vh 8.125vw;
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  gap: 7.188vw;
+}
+
+.navbar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-button {
+  font-family: "Poppins", sans-serif;
+  width: 100%;
+  text-align: center;
+  padding: 12px 20px;
+  background: var(--secondary-color-500);
+  color: var(--secondary-color-100);
+  border-radius: 4px;
+  border: 1px solid var(--secondary-color-500);
+  transition: color 0.1s, border-color 0.1s;
+}
+
+.nav-button.active {
+  background: rgb(22, 60, 159);
+  background: -moz-linear-gradient(
+    137deg,
+    rgba(22, 60, 159, 1) 0%,
+    rgba(49, 81, 194, 1) 35%,
+    rgba(154, 38, 225, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    137deg,
+    rgba(22, 60, 159, 1) 0%,
+    rgba(49, 81, 194, 1) 35%,
+    rgba(154, 38, 225, 1) 100%
+  );
+  background: linear-gradient(
+    137deg,
+    rgba(22, 60, 159, 1) 0%,
+    rgba(49, 81, 194, 1) 35%,
+    rgba(154, 38, 225, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#163c9f",endColorstr="#9a26e1",GradientType=1);
+  border: none;
+}
+
+.nav-button:hover {
+  border: 1px solid #ffffff10;
+}
+
+.nav-button.active:hover {
+  border: none;
+}
+
+.enter-left-animation {
+  animation: left-animation 0.1s forwards;
+}
+
+@keyframes left-animation {
+  0% {
+    transform: translate3d(-100px, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.text-gradient {
+  font-family: "Poppins", sans-serif;
+  background: #163c9f;
+  background: linear-gradient(to right, #163c9f 0%, #3151c2 35%, #9a26e1 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.application-container-top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 2rem;
+}
+
+.application-container-top h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.application-container-top p {
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.settings-title {
+  font-size: 1.25rem;
+  color: var(--secondary-color-300);
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.input-flex-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.input-flex-container p {
+  color: var(--secondary-color-100);
+}
+
+.select-input {
+  padding: 12px;
+  color: var(--secondary-color-200);
+  background: var(--secondary-color-500);
+  border-radius: 4px;
+  outline: none;
+  border: none;
+}
+
+.text-input {
+  padding: 12px;
+  color: var(--secondary-color-200);
+  background: var(--secondary-color-500);
+  border-radius: 4px;
+  outline: none;
+  border: none;
+}
+
+.text-input::placeholder {
+  font-family: "Poppins", sans-serif;
+  color: var(--secondary-color-300);
+}
+
+input.checkbox-input {
+  display: none;
+}
+
+div.checkbox-input {
+  display: block;
+  width: 80px;
+  height: 24px;
+  background: var(--secondary-color-500);
+  border-radius: 4px;
+}
+
+div.checkbox-input > div {
+  width: 40px;
+  height: 100%;
+  background: var(--secondary-color-200);
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+div.checkbox-input > div.active {
+  margin-left: auto;
+  background: rgb(22, 60, 159);
+  background: -moz-linear-gradient(
+    137deg,
+    rgba(22, 60, 159, 1) 0%,
+    rgba(49, 81, 194, 1) 35%,
+    rgba(154, 38, 225, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    137deg,
+    rgba(22, 60, 159, 1) 0%,
+    rgba(49, 81, 194, 1) 35%,
+    rgba(154, 38, 225, 1) 100%
+  );
+  background: linear-gradient(
+    137deg,
+    rgba(22, 60, 159, 1) 0%,
+    rgba(49, 81, 194, 1) 35%,
+    rgba(154, 38, 225, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#163c9f",endColorstr="#9a26e1",GradientType=1);
+}

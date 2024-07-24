@@ -1,0 +1,162 @@
+.input-container {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 4rem;
+}
+
+.navigator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.input-container > .navigator > .enter-decorator {
+  font-family: Cousine, sans-serif;
+  border: none;
+  background: var(--secondary-color-500);
+  opacity: 0.8;
+  color: var(--secondary-color-100);
+  border: 1px solid var(--secondary-color-500);
+  font-size: 14px;
+  line-height: 14px;
+  padding: 4px 8px;
+  border-radius: 2px;
+  display: block;
+  transition: color 0.1s, border-color 0.1s, opacity 0.1s;
+  width: max-content;
+  margin-left: auto;
+}
+
+.input-container > .navigator > .enter-decorator:hover {
+  opacity: 1;
+  border: 1px solid #ffffff10;
+}
+
+.input-container > .navigator > .arrow {
+  font-family: Cousine, sans-serif;
+  border: none;
+  background: var(--secondary-color-500);
+  opacity: 0.8;
+  color: var(--secondary-color-100);
+  border: 1px solid var(--secondary-color-500);
+  font-size: 14px;
+  line-height: 14px;
+  padding: 4px;
+  border-radius: 2px;
+  display: block;
+  transition: color 0.1s, border-color 0.1s, opacity 0.1s;
+  width: max-content;
+  margin-left: auto;
+}
+
+.input-container > .navigator > .viewNumber {
+  font-family: Cousine, sans-serif;
+  border: none;
+  background: var(--secondary-color-500);
+  opacity: 0.8;
+  color: var(--secondary-color-100);
+  border: 1px solid var(--secondary-color-500);
+  font-size: 14px;
+  line-height: 14px;
+  padding: 4px;
+  border-radius: 2px;
+  display: block;
+  transition: color 0.1s, border-color 0.1s, opacity 0.1s;
+  width: max-content;
+  margin-left: auto;
+}
+
+.input-container > .navigator > .arrow:hover {
+  opacity: 1;
+  border: 1px solid #ffffff10;
+}
+
+.input-container > div.disparator {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.input-container .disparator > input {
+  font-family: Cousine, sans-serif;
+  color: var(--secondary-color-100);
+  overlay: none;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 16px;
+  width: 100%;
+}
+
+.input-container .disparator > input::placeholder {
+  color: var(--secondary-color-300);
+}
+
+.separator {
+  width: calc(100% - 40px);
+  height: 2px;
+  margin: 4px 20px;
+  background: var(--secondary-color-100);
+  opacity: 0.1;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.view-contant {
+  padding: 20px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--secondary-color-100);
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.view-contant::-webkit-scrollbar {
+  width: 4px;
+}
+
+.view-contant::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.view-contant::-webkit-scrollbar-thumb {
+  background-color: #620fea74;
+  border-radius: 4px;
+}
+
+.loading-response {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 80vh;
+  align-items: center;
+  justify-content: center;
+
+  animation: loading 1s infinite;
+}
+
+@keyframes loading {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.loading-response > img {
+  display: block;
+  width: 80px;
+}
+
+.loading-response > p {
+  color: var(--secondary-color-200);
+  font-size: 16px;
+  text-align: center;
+  margin-top: 32px;
+  max-width: 400px;
+}
