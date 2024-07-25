@@ -1,8 +1,6 @@
 import React from 'react'
 import { PromptHistory } from '../../src/types/PromptHistory'
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs'
-import Brain from '../../src/Daijin/Brain'
-import { ReactSVG } from 'react-svg'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 import './App.css'
 import GeneratorIcon from '../../svgs/GeneratorIcon'
@@ -17,6 +15,20 @@ function App(): JSX.Element {
   const [history, setHistory] = React.useState<PromptHistory>([])
   const [loading, setLoading] = React.useState(false)
 
+  React.useEffect(() => {
+    function clearHistory() {
+      setHistory([])
+      setHistoryIndex(0)
+      setResponse('')
+      setLoading(false)
+    }
+
+    //@ts-ignore
+    window.api.onClearHistory(() => {
+      clearHistory()
+    })
+  }, [])
+
   const onSubmitInput = React.useCallback(async () => {
     const promptElement = promptRef.current
 
@@ -30,21 +42,14 @@ function App(): JSX.Element {
         })
       }
 
-      const brain = new Brain()
-
       const promptValue = promptElement.value
       promptElement.value = ''
       setResponse('')
       setLoading(true)
 
-      await brain.learn()
-
-      let response = ''
-
-      await brain.answer_this(messages, promptValue, (result) => {
-        response += result
-        setResponse((prev) => prev + result)
-      })
+      //@ts-ignore
+      const response = await window.api.proccessResponse(messages, promptValue)
+      setResponse(response)
 
       setLoading(false)
       setHistory((prev) => [...prev, { prompt: promptElement.value, response }])

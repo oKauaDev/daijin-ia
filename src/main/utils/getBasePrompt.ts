@@ -1,10 +1,9 @@
 import CONFIG from '../../renderer/src/constants/Config'
 import Config from './Config'
 import getSystemInfos from './getSystemInfos'
+import SystemInfoKeys from './SystemInfoKeys'
 
 interface ConfigInterface {
-  prompt_date: string
-  prompt: string
   lang: 'pt'
   start_with_system: boolean
   auto_update: boolean
@@ -16,57 +15,154 @@ interface ConfigInterface {
   ia_model: string
 }
 
-export default async function getBasePrompt() {
+function isKeypassWord(keys: string[], phrase: string) {
+  return keys.some((key) => phrase.toLowerCase().includes(key.toLowerCase()))
+}
+
+export default async function getBasePrompt(prompt: string) {
   try {
     let config: ConfigInterface | null = Config().get()
 
-    const system = await getSystemInfos()
+    const userinfo = await getSystemInfos().getUserInfo()
+    const platform = getSystemInfos().getSystemName()
 
-    let base_prompt = `
-      Você é Daijin um asistente pessoal que está na sua versão ${CONFIG.VERSION} e está do computador do ${system.username}, você está aqui para auxiliar ele no seu dia a dia, ele usa o sistema ${system.systemname} que está equipado com um processador ${system.cpu_name} em uma placa mãe ${system.mainboard} com ${system.free_mem} de memoria livre, ${system.used_mem} de memoria usada e ${system.cpu} de cpu usada.
+    let base_prompt = `Você é uma inteligência artificial que está integrada no computador do ${userinfo.username} que tem como diretório home a pasta localizada em ${userinfo.homedir} e que usa o shell ${userinfo.shell}, o sistema operacional do usuário é ${platform}.
 
-      Sua IA está equipada com o modelo ${config?.ia_model} e a empresa que está te sustentando é a ${config?.ia_type}.
-
-      A pasta home dele se encontra no caminho ${system.homedir}, o shell usado é ${system.shell}.
+    Atualmente estou usando o serviço ${config.ia_type} para rodar a IA e no modelo ${config.ia_model}, estou na minha versão ${CONFIG.VERSION}.
     `
 
-    if (system.apps) {
+    if (isKeypassWord(SystemInfoKeys.memory, prompt)) {
+      const memoryInfos = await getSystemInfos().getMemoryInfo()
+
       base_prompt += `
-        As aplicações que ele está usando são:
-        ${system.apps}
+      Você tem um armazenamento de ${memoryInfos.free_mem} de memória livre e ${memoryInfos.used_mem} de memória usada.
       `
     }
 
-    if (system.proccess) {
-      base_prompt += `
-        Os processos que estão sendo executados são:
-        ${system.proccess}
+    if (isKeypassWord(SystemInfoKeys.cpuUsage, prompt)) {
+      const cpu = await getSystemInfos().getCpuUsage()
+
+      if (cpu) {
+        base_prompt += `
+      Você está usando ${cpu}% da sua CPU.
       `
+      }
     }
 
-    if (system.npm) {
-      base_prompt += `
-        Os pacotes npm que ele está usando são:
-        ${system.npm}
-      `
+    if (isKeypassWord(SystemInfoKeys.apps, prompt)) {
+      const apps = await getSystemInfos().getApps()
+
+      if (apps) {
+        base_prompt += `
+        Você tem esses apps instalados: ${apps}
+        `
+      }
     }
 
-    if (system.yarn) {
-      base_prompt += `
-        Os pacotes yarn que ele está usando são:
-        ${system.yarn}
-      `
+    if (isKeypassWord(SystemInfoKeys.processes, prompt)) {
+      const processes = await getSystemInfos().getProcesses()
+
+      if (processes) {
+        base_prompt += `
+        Você tem esses processos em execução: ${processes}
+        `
+      }
     }
 
-    if (system.pnpm) {
-      base_prompt += `
-        Os pacotes pnpm que ele está usando são:
-        ${system.pnpm}
-      `
+    if (isKeypassWord(SystemInfoKeys.mainboard, prompt)) {
+      const mainboard = await getSystemInfos().getMainboardInfo()
+
+      if (mainboard) {
+        base_prompt += `
+        Sua placa mãe é essa: ${mainboard}
+        `
+      }
+    }
+
+    if (isKeypassWord(SystemInfoKeys.packageManager, prompt)) {
+      const packageManager = await getSystemInfos().getPackageManagerInfo()
+
+      if (packageManager) {
+        base_prompt += `
+        Você tem esses pacotes NPM instalados: ${packageManager.npm}
+        Você tem esses pacotes YARN instalados: ${packageManager.yarn}
+        Você tem esses pacotes PNPM instalados: ${packageManager.pnpm}
+        `
+      }
+    }
+
+    if (isKeypassWord(SystemInfoKeys.cpuInfo, prompt)) {
+      const cpuInfo = await getSystemInfos().getCpuInfo()
+
+      if (cpuInfo) {
+        base_prompt += `
+        Essa é sua CPU: ${cpuInfo}
+        `
+      }
+    }
+
+    if (isKeypassWord(SystemInfoKeys.osInfo, prompt)) {
+      const osInfo = JSON.stringify(await getSystemInfos().getOsInfo())
+
+      if (osInfo) {
+        base_prompt += `
+        Essas são as informações do sistema operacional: ${osInfo}
+        `
+      }
+    }
+
+    if (isKeypassWord(SystemInfoKeys.network, prompt)) {
+      const net = await getSystemInfos().getNetworkInterfaces()
+
+      if (net) {
+        base_prompt += `
+        Informações da rede: ${JSON.stringify(net)}
+        `
+      }
+    }
+
+    if (isKeypassWord(SystemInfoKeys.battery, prompt)) {
+      const battery = await getSystemInfos().getBatteryInfo()
+
+      if (battery) {
+        base_prompt += `
+        Informações da bateria: ${JSON.stringify(battery)}
+        `
+      }
+    }
+
+    if (isKeypassWord(SystemInfoKeys.disk, prompt)) {
+      const disk = JSON.stringify(await getSystemInfos().getDiskInfo())
+
+      if (disk) {
+        base_prompt += `
+        Informações do disco: ${disk}
+        `
+      }
+    }
+
+    if (isKeypassWord(SystemInfoKeys.users, prompt)) {
+      const users = JSON.stringify(await getSystemInfos().getUsers())
+
+      if (users) {
+        base_prompt += `
+        Usuários na máquina: ${users}
+        `
+      }
+    }
+
+    if (isKeypassWord(SystemInfoKeys.gpu, prompt)) {
+      const gpu = JSON.stringify(await getSystemInfos().getGpuInfo())
+
+      if (gpu) {
+        base_prompt += `
+        Placa de vídeo: ${gpu}
+        `
+      }
     }
 
     base_prompt += `
-      Como assistente pessoal você é bem amigável e sempre manda respostas bonitas formatadas com markdown, com emojis e fáceis de entender, e sempre responde as perguntas do usuário, sobre as informações passadas use apenas se necessário.
+      Como assistente pessoal, você é bem amigável e sempre manda respostas bonitas formatadas com markdown, com emojis e fáceis de entender, e sempre responde as perguntas do usuário. Use as informações passadas apenas se necessário.
     `
 
     return base_prompt

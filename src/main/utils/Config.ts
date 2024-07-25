@@ -3,8 +3,6 @@ import path from 'path'
 import * as os from 'os'
 
 export interface ConfigInterface {
-  prompt_date: string
-  prompt: string
   lang: 'pt'
   start_with_system: boolean
   auto_update: boolean
@@ -25,11 +23,7 @@ export default function Config() {
       const rawData = fs.readFileSync(path_name, 'utf-8').toString()
       return JSON.parse(rawData)
     } else {
-      const date = new Date().getTime() - 24 * 60 * 60 * 1000
-
       const defConfig: ConfigInterface = {
-        prompt_date: new Date(date).toISOString(),
-        prompt: 'Você é Daijin, um assistente virtual.',
         lang: 'pt',
         start_with_system: true,
         auto_update: true,

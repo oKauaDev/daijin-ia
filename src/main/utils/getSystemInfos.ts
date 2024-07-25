@@ -5,107 +5,153 @@ import si from 'systeminformation'
 
 async function system(command: string) {
   try {
-    const apps = await new Promise<string | null>((resolve) => {
+    const output = await new Promise<string | null>((resolve) => {
       exec(command, (error, stdout, stderr) => {
-        if (error) {
+        if (error || stderr) {
           resolve(null)
           return
         }
-        if (stderr) {
-          resolve(null)
-          return
-        }
-
         resolve(stdout)
       })
     })
-
-    return apps
+    return output
   } catch {
     return null
   }
 }
 
-export default async function getSystemInfos() {
-  console.log('Pegando informações do sistema')
+async function getUserInfo() {
   const { username, homedir, shell } = os.userInfo()
-  const platform = os.platform()
+  return { username, homedir, shell }
+}
 
-  let cpu: number | null = null
+function getPlatform() {
+  return os.platform()
+}
 
+async function getCpuUsage() {
   try {
-    console.log('Pegando CPU')
-    cpu = await nodeos.cpu.usage()
+    const cpu = await nodeos.cpu.usage()
+    return cpu
   } catch {
-    cpu = null
+    return null
   }
+}
 
-  console.log('Pegando Memória livre')
+async function getMemoryInfo() {
   const free_mem = (await nodeos.mem.free()).freeMemMb
-  console.log('Pegando Memória usada')
   const used_mem = (await nodeos.mem.used()).usedMemMb
+  return { free_mem, used_mem }
+}
 
+async function getApps(platform: string) {
   let apps: string | null = null
-  let proccess: string | null = null
-  let systemname: string | null = null
-  let mainboard: string | null = null
-
   switch (platform) {
     case 'win32':
-      console.log('Pegando Apps')
       apps = await system('wmic product get name')
-      console.log('Pegando Processos')
-      proccess = await system('tasklist')
-      console.log('Pegando Placa Mãe')
-      mainboard = await system('wmic baseboard get product,Manufacturer,version')
-      systemname = 'Windows'
       break
     case 'darwin':
-      console.log('Pegando Apps')
+    case 'linux':
       apps = await system('brew list')
-      console.log('Pegando Processos')
+      break
+  }
+  return apps
+}
+
+async function getProcesses(platform: string) {
+  let proccess: string | null = null
+  switch (platform) {
+    case 'win32':
+      proccess = await system('tasklist')
+      break
+    case 'darwin':
+    case 'linux':
       proccess = await system('ps aux')
-      console.log('Pegando Placa Mãe')
+      break
+  }
+  return proccess
+}
+
+async function getMainboardInfo(platform: string) {
+  let mainboard: string | null = null
+  switch (platform) {
+    case 'win32':
+      mainboard = await system('wmic baseboard get product,Manufacturer,version')
+      break
+    case 'darwin':
       mainboard = await system(`system_profiler SPHardwareDataType | grep "Motherboard"`)
-      systemname = 'MacOS'
       break
     case 'linux':
-      console.log('Pegando Apps')
-      apps = await system('brew list')
-      console.log('Pegando Processos')
-      proccess = await system('ps aux')
-      systemname = 'Linux'
-      console.log('Pegando Placa Mãe')
       mainboard = await system('sudo dmidecode -t baseboard')
       break
   }
+  return mainboard
+}
 
-  console.log('Pegando NPM')
+async function getPackageManagerInfo() {
   const npm = await system('npm list -g --depth=0')
-  console.log('Pegando Yarn')
   const yarn = await system('yarn global list')
-  console.log('Pegando Pnpm')
   const pnpm = await system('pnpm list -g --depth=0')
+  return { npm, yarn, pnpm }
+}
 
-  console.log('Pegando informações da CPU')
+async function getCpuInfo() {
   const cpuInfo = await si.cpu()
+  const cpu_name = `${cpuInfo.manufacturer} ${cpuInfo.brand} ${cpuInfo.speed} GHz`
+  return cpu_name
+}
 
-  const cpu_name = `${cpuInfo.manufacturer} ${cpuInfo.brand} ${cpuInfo.speed}, "GHz"`
+export async function getOsInfo() {
+  const osInfo = await si.osInfo()
+  return osInfo
+}
+
+export async function getNetworkInterfaces() {
+  const networkInterfaces = await si.networkInterfaces()
+  return networkInterfaces
+}
+
+export async function getBatteryInfo() {
+  const battery = await si.battery()
+  return battery
+}
+
+export async function getDiskInfo() {
+  const diskLayout = await si.diskLayout()
+  const diskUsage = await si.fsSize()
+  return { diskLayout, diskUsage }
+}
+
+export async function getUsers() {
+  const users = await si.users()
+  return users
+}
+
+export async function getGpuInfo() {
+  const graphics = await si.graphics()
+  return graphics
+}
+
+export default function getSystemInfos() {
+  const platform = getPlatform()
+  const systemname = platform === 'win32' ? 'Windows' : platform === 'darwin' ? 'MacOS' : 'Linux'
 
   return {
-    username,
-    homedir,
-    shell,
-    systemname,
-    cpu,
-    free_mem,
-    used_mem,
-    apps,
-    proccess,
-    npm,
-    yarn,
-    pnpm,
-    mainboard,
-    cpu_name
+    getUserInfo,
+    getPlatform,
+    getSystemName: () => systemname,
+    getMemoryInfo,
+    getCpuUsage,
+    getApps: async () => await getApps(platform),
+    getProcesses: async () => await getProcesses(platform),
+    getMainboardInfo: async () => await getMainboardInfo(platform),
+    getPackageManagerInfo,
+    getCpuInfo,
+    getOsInfo,
+    getNetworkInterfaces,
+    getBatteryInfo,
+    getDiskInfo,
+    getUsers,
+    getGpuInfo
   }
 }

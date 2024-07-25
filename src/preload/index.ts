@@ -1,13 +1,17 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { ConfigInterface } from '../main/utils/Config'
+import { ChatCompletionMessageParam } from 'openai/resources'
 
 // Custom APIs for renderer
 const api = {
   getConfig: () => ipcRenderer.invoke('get-config'),
-  refreshPrompt: () => ipcRenderer.invoke('refresh-prompt'),
+  toggleAutoLaucher: () => ipcRenderer.invoke('toggle-auto-laucher'),
+  proccessResponse: (history: ChatCompletionMessageParam[], prompt: string) =>
+    ipcRenderer.invoke('proccess-response', history, prompt),
   setConfig: (key: keyof ConfigInterface, value: string) =>
-    ipcRenderer.invoke('set-config', key, value)
+    ipcRenderer.invoke('set-config', key, value),
+  onClearHistory: (callback: () => void) => ipcRenderer.on('clear-history', callback)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

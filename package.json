@@ -1,6 +1,6 @@
 {
   "name": "daijin-ia",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Just an AI to help me in my everyday life.",
   "main": "./out/main/index.js",
   "author": "Kauã Braz",

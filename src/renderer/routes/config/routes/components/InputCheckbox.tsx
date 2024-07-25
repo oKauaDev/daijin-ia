@@ -15,6 +15,11 @@ export default function InputCheckbox({ settingKey, label }: Props) {
     const target = event.currentTarget
 
     if (target) {
+      if (settingKey === 'start_with_system') {
+        // @ts-ignore
+        await window.api.toggleAutoLaucher()
+      }
+
       setCheck(target.checked)
       //@ts-ignore
       glovalVariables.setConfig({ ...glovalVariables.config, [settingKey]: target.checked })

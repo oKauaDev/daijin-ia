@@ -23,7 +23,10 @@
   padding: 4px 8px;
   border-radius: 2px;
   display: block;
-  transition: color 0.1s, border-color 0.1s, opacity 0.1s;
+  transition:
+    color 0.1s,
+    border-color 0.1s,
+    opacity 0.1s;
   width: max-content;
   margin-left: auto;
 }
@@ -45,7 +48,10 @@
   padding: 4px;
   border-radius: 2px;
   display: block;
-  transition: color 0.1s, border-color 0.1s, opacity 0.1s;
+  transition:
+    color 0.1s,
+    border-color 0.1s,
+    opacity 0.1s;
   width: max-content;
   margin-left: auto;
 }
@@ -62,7 +68,10 @@
   padding: 4px;
   border-radius: 2px;
   display: block;
-  transition: color 0.1s, border-color 0.1s, opacity 0.1s;
+  transition:
+    color 0.1s,
+    border-color 0.1s,
+    opacity 0.1s;
   width: max-content;
   margin-left: auto;
 }
