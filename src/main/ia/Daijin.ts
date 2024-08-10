@@ -12,13 +12,9 @@ export default class Daijin {
     this.prompt = prompt
   }
 
-  private async getPrompt() {
-    return getBasePrompt(this.prompt)
-  }
-
   public async proccess() {
     try {
-      const systemPrompt = await this.getPrompt()
+      const systemPrompt = await getBasePrompt()
 
       const confis = Config().get()
 

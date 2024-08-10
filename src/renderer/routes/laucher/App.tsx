@@ -151,7 +151,7 @@ function App(): JSX.Element {
       {loading ? (
         <div className="loading-response">
           <img src={DaijinLoading} />
-          <p>Estou gerando a sua resposta, normalmente não demoro mais de 10 segundos.</p>
+          <p>Estou gerando a sua resposta, normalmente não demoro mais de 30 segundos.</p>
         </div>
       ) : (
         <div className="view-contant">
